@@ -6,7 +6,7 @@
         Order Start Time module""",
 
     'description': """
-        This module allows each line of quotation and invoice to have start time
+        This module adds start time field for each line in quotations and invoices
     """,
 
     'author': "Kusuma Ruslan",
