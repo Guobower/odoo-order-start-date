@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sale_start_time.view_order_form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
+                <field name="start_time"
+                    attrs="{'invisible': [('have_start_time', '=', False)], 'required': [('have_start_time', '=', True)]}"/>
+                <field name="have_start_time" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <field name="start_time"
+                       attrs="{'invisible': [('have_start_time', '=', False)], 'required': [('have_start_time', '=', True)]}"/>
+                <field name="have_start_time" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <template id="report_quotation_time" inherit_id="sale.report_saleorder_document">     
+        <xpath expr="//t[@t-set='display_discount']" position="after">
+            <t t-set="display_start_time" t-value="any([l.have_start_time for l in doc.order_line])"/>
+        </xpath>        
+        <xpath expr="//*[text()='Quantity']" position="before">
+            <th t-if="display_start_time" class="text-right">Start Time</th>
+        </xpath>        
+        <xpath expr="//span[@t-field='l.product_uom_qty']/parent::td" position="before">
+            <td t-if="display_start_time" class="text-right">
+                <span t-field="l.start_time"/>
+            </td>
+        </xpath>        
+    </template>
+
+</odoo>
